@@ -490,8 +490,9 @@
       var src = [].slice.call(document.querySelectorAll('.t-store__prod-popup__btn-wrapper a, .t-store__prod-popup__btn-wrapper button, a, button'))
         .filter(function (b) { return /в корзину/i.test(b.textContent) && b.offsetParent; })[0];
       if (!src || document.getElementById('rk-sticky')) return;
-      var price = (document.querySelector('.js-store-prod-price, .t-store__prod-popup__price-wrapper') || {}).textContent || '';
-      price = (price.match(/[\d\s]+[р₽]/) || [''])[0].trim();
+      var pw = document.querySelector('.t-store__prod-popup__price-wrapper, .js-store-prod-price');
+      var price = ((pw ? pw.innerText : '').match(/\d[\d\s]{3,}\s*[р₽]/) || [''])[0].replace(/\s+/g,' ').trim();
+      if (!price) return;
       var bar = document.createElement('div'); bar.id = 'rk-sticky';
       bar.innerHTML = '<span class="rk-sticky__p">' + price + '</span><button class="rk-sticky__b" type="button">В корзину</button>';
       bar.querySelector('.rk-sticky__b').addEventListener('click', function () { src.click(); });
