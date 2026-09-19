@@ -478,7 +478,7 @@
       var d = document.createElement('div');
       d.className = 'rk-cart-trust';
       d.innerHTML = '<span>🎾 В подарок: чехол и овергрип</span>' +
-        '<span>Оригинал с серийным номером · возврат 14 дней · оплата после проверки у курьера</span>';
+        '<span>Оригинал с серийным номером · возврат 14 дней · безопасная оплата картой или СБП</span>';
       btn.parentNode.insertBefore(d, btn);
     } catch (e) {}
   }
