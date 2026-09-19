@@ -466,6 +466,7 @@
       document.querySelectorAll(".t-store [itemprop], .t-store__prod-snippet__container [itemprop], .t-store__prod-popup__container [itemprop]").forEach(function (el) { el.removeAttribute("itemprop"); });
     } catch (e) {}
   }
+  (function rkCROcss(){try{if(document.getElementById('rk-cro-css'))return;var st=document.createElement('style');st.id='rk-cro-css';st.textContent=".rk-cart-trust{display:flex;flex-direction:column;gap:4px;margin:8px 0 12px;padding:10px 12px;border:1px solid #D7DEDB;border-radius:6px;background:#F4F7F5;font:500 12.5px/1.4 'Manrope',system-ui,sans-serif;color:#5B6663}.rk-cart-trust span:first-child{font-weight:700;color:#0E3B33}#rk-sticky{position:fixed;left:0;right:0;bottom:0;z-index:9999;display:flex;align-items:center;gap:12px;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid #D7DEDB;box-shadow:0 -6px 20px -12px rgba(20,24,26,.4)}#rk-sticky .rk-sticky__p{font:800 18px/1 'Manrope',system-ui,sans-serif;color:#14181A;font-variant-numeric:tabular-nums;white-space:nowrap}#rk-sticky .rk-sticky__b{flex:1;padding:14px;border:0;border-radius:6px;background:#0E3B33;color:#fff;font:700 15px/1 'Manrope',system-ui,sans-serif;cursor:pointer}@media(min-width:641px){#rk-sticky{display:none}}";(document.head||document.documentElement).appendChild(st);}catch(e){}})();
   function rkCartCRO() {
     // Доверие + подарок над кнопкой «Оформить заказ» в модалке корзины
     try {
