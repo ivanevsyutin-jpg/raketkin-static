@@ -466,6 +466,37 @@
       document.querySelectorAll(".t-store [itemprop], .t-store__prod-snippet__container [itemprop], .t-store__prod-popup__container [itemprop]").forEach(function (el) { el.removeAttribute("itemprop"); });
     } catch (e) {}
   }
+  function rkCartCRO() {
+    // Доверие + подарок над кнопкой «Оформить заказ» в модалке корзины
+    try {
+      var btn = [].slice.call(document.querySelectorAll('.t-store__viewbtn, .t-form__submit, .t-submit, button'))
+        .filter(function (b) { return /оформить заказ/i.test(b.textContent) && b.offsetParent; })[0];
+      if (!btn) return;
+      var box = btn.closest('.t-store__cart, .t-popup__container, form') || btn.parentNode;
+      if (box.querySelector('.rk-cart-trust')) return;
+      var d = document.createElement('div');
+      d.className = 'rk-cart-trust';
+      d.innerHTML = '<span>🎾 В подарок: чехол и овергрип</span>' +
+        '<span>Оригинал с серийным номером · возврат 14 дней · оплата после проверки у курьера</span>';
+      btn.parentNode.insertBefore(d, btn);
+    } catch (e) {}
+  }
+  function rkStickyBuy() {
+    // Липкая кнопка «В корзину» снизу на мобиле /tproduct/
+    try {
+      if (location.pathname.indexOf('/tproduct/') !== 0) return;
+      if (window.innerWidth > 640) { var ex = document.getElementById('rk-sticky'); if (ex) ex.remove(); return; }
+      var src = [].slice.call(document.querySelectorAll('.t-store__prod-popup__btn-wrapper a, .t-store__prod-popup__btn-wrapper button, a, button'))
+        .filter(function (b) { return /в корзину/i.test(b.textContent) && b.offsetParent; })[0];
+      if (!src || document.getElementById('rk-sticky')) return;
+      var price = (document.querySelector('.js-store-prod-price, .t-store__prod-popup__price-wrapper') || {}).textContent || '';
+      price = (price.match(/[\d\s]+[р₽]/) || [''])[0].trim();
+      var bar = document.createElement('div'); bar.id = 'rk-sticky';
+      bar.innerHTML = '<span class="rk-sticky__p">' + price + '</span><button class="rk-sticky__b" type="button">В корзину</button>';
+      bar.querySelector('.rk-sticky__b').addEventListener('click', function () { src.click(); });
+      document.body.appendChild(bar);
+    } catch (e) {}
+  }
   function relevantsClean() {
     // «Смотрите также» на странице товара: не предлагать распроданные, если есть хоть одна в наличии
     var cont = document.querySelector(".t-store__relevants__container"); if (!cont) return;
@@ -642,13 +673,14 @@
     try { relevantsClean(); } catch (e) {}
     try { rkBgResize(); rkH2(); } catch (e) {}
     try { rkStripMicrodata(); } catch (e) {}
+    try { rkCartCRO(); rkStickyBuy(); } catch (e) {}
     try { rkImages(); } catch (e) {}
     try { rkBreadcrumb(); } catch (e) {}
     try { if (!document.documentElement.lang) document.documentElement.lang = "ru"; } catch (e) {}
   }
   if (document.readyState !== "loading") run2(); else document.addEventListener("DOMContentLoaded", run2);
   [200, 600, 1200, 2500, 4000, 7000].forEach(function (d) { setTimeout(run2, d); });
-  try { var moT = null; new MutationObserver(function (ms) { if (ms.every(function (m) { return m.target.closest && m.target.closest(".rk-showoos, .rk-quiz"); })) return; if (moT) return; moT = setTimeout(function () { moT = null; try { cleanTitles(); cardChips(); oosCards(); trustStatic(); navFix(); oosCollapse(); relevantsClean(); rkImages(); rkBreadcrumb(); rkBgResize(); rkH2(); rkStripMicrodata(); } catch (e) {} }, 150); }).observe(document.documentElement, { childList: true, subtree: true }); } catch (e) {}
+  try { var moT = null; new MutationObserver(function (ms) { if (ms.every(function (m) { return m.target.closest && m.target.closest(".rk-showoos, .rk-quiz"); })) return; if (moT) return; moT = setTimeout(function () { moT = null; try { cleanTitles(); cardChips(); oosCards(); trustStatic(); navFix(); oosCollapse(); relevantsClean(); rkImages(); rkBreadcrumb(); rkBgResize(); rkH2(); rkStripMicrodata(); rkCartCRO(); rkStickyBuy(); } catch (e) {} }, 150); }).observe(document.documentElement, { childList: true, subtree: true }); } catch (e) {}
 })();
 
 /* ===== Каталог: случайный порядок + распроданные в конец (CSS order, устойчиво к перерисовке). Перенесено из HEAD 31.07 ===== */
