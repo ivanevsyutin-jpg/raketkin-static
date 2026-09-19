@@ -467,6 +467,19 @@
     } catch (e) {}
   }
   (function rkCROcss(){try{if(document.getElementById('rk-cro-css'))return;var st=document.createElement('style');st.id='rk-cro-css';st.textContent=".rk-cart-trust{display:flex;flex-direction:column;gap:4px;margin:8px 0 12px;padding:10px 12px;border:1px solid #D7DEDB;border-radius:6px;background:#F4F7F5;font:500 12.5px/1.4 'Manrope',system-ui,sans-serif;color:#5B6663}.rk-cart-trust span:first-child{font-weight:700;color:#0E3B33}#rk-sticky{position:fixed;left:0;right:0;bottom:0;z-index:9999;display:flex;align-items:center;gap:12px;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid #D7DEDB;box-shadow:0 -6px 20px -12px rgba(20,24,26,.4)}#rk-sticky .rk-sticky__p{font:800 18px/1 'Manrope',system-ui,sans-serif;color:#14181A;font-variant-numeric:tabular-nums;white-space:nowrap}#rk-sticky .rk-sticky__b{flex:1;padding:14px;border:0;border-radius:6px;background:#0E3B33;color:#fff;font:700 15px/1 'Manrope',system-ui,sans-serif;cursor:pointer}@media(min-width:641px){#rk-sticky{display:none}}";(document.head||document.documentElement).appendChild(st);}catch(e){}})();
+  function rkGoals() {
+    if (window.__rkGoals) return; window.__rkGoals = true;
+    var C = 112572367;
+    function hit(g) { try { if (window.ym) ym(C, 'reachGoal', g); } catch (e) {} }
+    document.addEventListener('click', function (ev) {
+      var t = ev.target; if (!t || !t.closest) return;
+      var el = t.closest('a,button,.t-store__viewbtn,.t-submit,.t-form__submit');
+      if (!el) return;
+      var txt = (el.textContent || '').toLowerCase();
+      if (/в корзину/.test(txt)) hit('add_to_cart');
+      else if (/оформить заказ/.test(txt)) hit('order');
+    }, true);
+  }
   function rkCartCRO() {
     // Доверие + подарок над кнопкой «Оформить заказ» в модалке корзины
     try {
@@ -675,7 +688,7 @@
     try { relevantsClean(); } catch (e) {}
     try { rkBgResize(); rkH2(); } catch (e) {}
     try { rkStripMicrodata(); } catch (e) {}
-    try { rkCartCRO(); rkStickyBuy(); } catch (e) {}
+    try { rkGoals(); rkCartCRO(); rkStickyBuy(); } catch (e) {}
     try { rkImages(); } catch (e) {}
     try { rkBreadcrumb(); } catch (e) {}
     try { if (!document.documentElement.lang) document.documentElement.lang = "ru"; } catch (e) {}
