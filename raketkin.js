@@ -321,7 +321,7 @@ if (!window.__rkLoadedMain) { window.__rkLoadedMain = true;
     if (!document.getElementById("rk-fonts")) {
       var l = document.createElement("link");
       l.id = "rk-fonts"; l.rel = "stylesheet";
-      l.href = "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap";
+      l.href = "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap";
       (document.head || document.documentElement).appendChild(l);
     }
   } catch (e) {}
