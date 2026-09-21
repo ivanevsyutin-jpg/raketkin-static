@@ -1,3 +1,5 @@
+/* guard: файл может прийти дважды (VPS опоздал после переключения на jsDelivr) */
+if (!window.__rkLoadedMain) { window.__rkLoadedMain = true;
 /* raketkin.shop — вспомогательный скрипт (грузится как внешний файл, HEAD не раздувается) */
 (function () {
   "use strict";
@@ -724,3 +726,5 @@ var n=0,iv=setInterval(function(){tick();if(++n>60)clearInterval(iv);},500);
 if(document.readyState!=="loading")tick();else document.addEventListener("DOMContentLoaded",tick);
 setTimeout(function(){var C=cont();if(C&&W.MutationObserver){mo=new MutationObserver(function(){apply();});mo.observe(C,{childList:true});}},1500);
 })();
+
+}
