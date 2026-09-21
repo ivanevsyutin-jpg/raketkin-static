@@ -261,7 +261,7 @@ if(document.querySelector('.kr-dlv'))return;
 var anc=document.querySelector('.kr-faq')||document.querySelector('.kr-trust')||document.querySelector('#rec2359781121');
 if(!anc)return;
 var s=document.createElement('div');s.className='kr-dlv';s.id='dostavka';
-s.innerHTML='<div class="kr-dlv__wrap"><div class="kr-dlv__title">Доставка и оплата</div><div class="kr-dlv__grid"><div class="kr-dlv__card"><div class="kr-dlv__h">По России</div><p>СДЭК, Ozon, Яндекс Доставка. Доставка оплачивается отдельно по тарифу выбранной службы.</p></div><div class="kr-dlv__card"><div class="kr-dlv__h">По Москве</div><p>Доставка осуществляется в день заказа. После оформления заказа менеджер свяжется для уточнения времени доставки.</p></div><div class="kr-dlv__card"><div class="kr-dlv__h">Самовывоз</div><p>г. Москва, ул. Берёзовая аллея, 17к1. Шоурума у нас нет — дождитесь подтверждения менеджера перед тем, как приехать.</p></div></div><div class="kr-dlv__note">Оплата онлайн — картой или через СБП</div></div>';
+s.innerHTML='<div class="kr-dlv__wrap"><div class="kr-dlv__title">Доставка и оплата</div><div class="kr-dlv__grid"><div class="kr-dlv__card"><div class="kr-dlv__h">По России</div><p>СДЭК, Ozon, Яндекс Доставка. Доставка 500 ₽ в любой город.</p></div><div class="kr-dlv__card"><div class="kr-dlv__h">По Москве</div><p>Курьер в день заказа, 1 500 ₽. После оформления менеджер свяжется и уточнит время.</p></div><div class="kr-dlv__card"><div class="kr-dlv__h">Самовывоз</div><p>г. Москва, ул. Берёзовая аллея, 17к1. Шоурума у нас нет — дождитесь подтверждения менеджера перед тем, как приехать.</p></div></div><div class="kr-dlv__note">Оплата онлайн — картой или через СБП</div></div>';
 anc.parentNode.insertBefore(s,anc);
 }
 function footer(){
@@ -304,8 +304,8 @@ var truck='<svg viewBox="0 0 24 24"><path d="M3 7.5h11v9H3z"/><path d="M14 10.5h
 var bolt='<svg viewBox="0 0 24 24"><path d="M13 3 4 14h7l-1 7 9-11h-7z"/></svg>';
 var pin='<svg viewBox="0 0 24 24"><path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>';
 d.innerHTML='<div class="kr-dlv__wrap"><div class="kr-dlv__title">Доставка и оплата</div><div class="kr-dlv__grid">'+
-'<div class="kr-dlv__card"><div class="kr-dlv__ic">'+truck+'</div><div class="kr-dlv__h">По всей России</div><p>Отправляем СДЭК, Ozon и Яндекс Доставкой в любой город. Стоимость рассчитывается по тарифу выбранной службы и оплачивается отдельно.</p></div>'+
-'<div class="kr-dlv__card"><div class="kr-dlv__ic">'+bolt+'</div><div class="kr-dlv__h">По Москве — в день заказа</div><p>Курьерская доставка в день оформления. После заказа менеджер свяжется с вами и согласует удобное время.</p></div>'+
+'<div class="kr-dlv__card"><div class="kr-dlv__ic">'+truck+'</div><div class="kr-dlv__h">По всей России</div><p>Отправляем СДЭК, Ozon и Яндекс Доставкой в любой город. Доставка 500 ₽, сумма сразу видна в корзине.</p></div>'+
+'<div class="kr-dlv__card"><div class="kr-dlv__ic">'+bolt+'</div><div class="kr-dlv__h">По Москве — в день заказа</div><p>Курьерская доставка в день оформления, 1 500 ₽. После заказа менеджер свяжется с вами и согласует удобное время.</p></div>'+
 '<div class="kr-dlv__card"><div class="kr-dlv__ic">'+pin+'</div><div class="kr-dlv__h">Самовывоз</div><p>Заберите заказ лично по адресу на карте. Шоурума у нас нет — приезжайте только после подтверждения менеджера.</p></div>'+
 '</div><div class="kr-dlv__map"><div class="kr-dlv__maptt">'+pin+'Пункт самовывоза · г. Москва, ул. Берёзовая аллея, 17к1</div><iframe loading="lazy" src="https://yandex.ru/map-widget/v1/?ll=37.617536%2C55.850914&z=17&pt=37.617536%2C55.850914%2Cpm2rdm"></iframe></div>'+
 '<div class="kr-dlv__note">Оплата онлайн — банковской картой или через СБП</div></div>';
