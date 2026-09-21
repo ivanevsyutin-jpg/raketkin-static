@@ -107,16 +107,31 @@
           "returnMethod": "https://schema.org/ReturnByMail",
           "returnFees": "https://schema.org/ReturnShippingFees"
         },
-        "shippingDetails": {
-          "@type": "OfferShippingDetails",
-          "shippingRate": { "@type": "MonetaryAmount", "value": "500", "currency": "RUB" },
-          "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "RU", "addressRegion": "Москва" },
-          "deliveryTime": {
-            "@type": "ShippingDeliveryTime",
-            "handlingTime": { "@type": "QuantitativeValue", "minValue": 0, "maxValue": 0, "unitCode": "DAY" },
-            "transitTime": { "@type": "QuantitativeValue", "minValue": 0, "maxValue": 1, "unitCode": "DAY" }
+        // Доставка = корзина Tilda: курьер по Москве 1500 ₽ в день заказа, по России ТК 500 ₽ (1-5 дней). Самовывоз бесплатно в разметку не входит.
+        "shippingDetails": [
+          {
+            "@type": "OfferShippingDetails",
+            "shippingLabel": "Курьер по Москве",
+            "shippingRate": { "@type": "MonetaryAmount", "value": "1500", "currency": "RUB" },
+            "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "RU", "addressRegion": "RU-MOW" },
+            "deliveryTime": {
+              "@type": "ShippingDeliveryTime",
+              "handlingTime": { "@type": "QuantitativeValue", "minValue": 0, "maxValue": 0, "unitCode": "DAY" },
+              "transitTime": { "@type": "QuantitativeValue", "minValue": 0, "maxValue": 1, "unitCode": "DAY" }
+            }
+          },
+          {
+            "@type": "OfferShippingDetails",
+            "shippingLabel": "Доставка по России транспортной компанией",
+            "shippingRate": { "@type": "MonetaryAmount", "value": "500", "currency": "RUB" },
+            "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "RU" },
+            "deliveryTime": {
+              "@type": "ShippingDeliveryTime",
+              "handlingTime": { "@type": "QuantitativeValue", "minValue": 0, "maxValue": 1, "unitCode": "DAY" },
+              "transitTime": { "@type": "QuantitativeValue", "minValue": 1, "maxValue": 5, "unitCode": "DAY" }
+            }
           }
-        }
+        ]
       }
     };
     if (sku) data.mpn = sku;
