@@ -484,6 +484,55 @@ if (!window.__rkLoadedMain) { window.__rkLoadedMain = true;
     } catch (e) {}
   }
   (function rkCROcss(){try{if(document.getElementById('rk-cro-css'))return;var st=document.createElement('style');st.id='rk-cro-css';st.textContent=".rk-cart-trust{display:flex;flex-direction:column;gap:4px;margin:8px 0 12px;padding:10px 12px;border:1px solid #D7DEDB;border-radius:6px;background:#F4F7F5;font:500 12.5px/1.4 'Manrope',system-ui,sans-serif;color:#5B6663}.rk-cart-trust span:first-child{font-weight:700;color:#0E3B33}#rk-sticky{position:fixed;left:0;right:0;bottom:0;z-index:9999;display:flex;align-items:center;gap:12px;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid #D7DEDB;box-shadow:0 -6px 20px -12px rgba(20,24,26,.4)}#rk-sticky .rk-sticky__p{font:800 18px/1 'Manrope',system-ui,sans-serif;color:#14181A;font-variant-numeric:tabular-nums;white-space:nowrap}#rk-sticky .rk-sticky__b{flex:1;padding:14px;border:0;border-radius:6px;background:#0E3B33;color:#fff;font:700 15px/1 'Manrope',system-ui,sans-serif;cursor:pointer}@media(min-width:641px){#rk-sticky{display:none}}";(document.head||document.documentElement).appendChild(st);}catch(e){}})();
+  // v2.33: живые цены и наличие на статичных страницах (бренды, /podbor, обзоры) из API Tilda Store.
+  //        В HTML цены вшиты при сборке и устаревают; здесь они сверяются с каталогом при каждом открытии.
+  function rkLivePrices() {
+    try {
+      if (window.__rkLive || location.pathname.indexOf("/tproduct/") === 0) return;
+      if (!document.querySelector(".rk-bp__price, .rk-rv__price, .rk-rv__mbar, .rk-rv table")) return;
+      window.__rkLive = true;
+      var KEY = "rkLiveP1", TTL = 600000, cached = null;
+      try { cached = JSON.parse(sessionStorage.getItem(KEY) || "null"); } catch (e) {}
+      function money(v) { return Math.round(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " ₽"; }
+      function uidOf(a) { var m = a && (a.getAttribute("href") || "").match(/\/tproduct\/(\d+)-/); return m ? m[1] : null; }
+      function apply(map) {
+        document.querySelectorAll("a.rk-bp__card").forEach(function (c) {
+          var p = map[uidOf(c)]; if (!p) return;
+          var pr = c.querySelector(".rk-bp__price"); if (pr && p.price) pr.textContent = money(p.price);
+          var st = c.querySelector(".rk-bp__st");
+          if (p.stock) { c.setAttribute("data-stock", "1"); c.classList.remove("rk-bp__card_oos"); if (st) st.textContent = "В наличии"; }
+          else { c.removeAttribute("data-stock"); c.classList.add("rk-bp__card_oos"); if (st) st.textContent = "Нет в наличии"; }
+        });
+        var side = document.querySelector(".rk-rv__price");
+        if (side) {
+          var box = side.parentNode, p = map[uidOf(box.querySelector('a[href*="/tproduct/"]'))];
+          if (p) {
+            if (p.price) side.textContent = money(p.price);
+            var s = box.querySelector(".rk-rv__stock");
+            if (s) { s.classList.toggle("ok", p.stock); s.classList.toggle("no", !p.stock); s.textContent = p.stock ? "В наличии в Москве" : "Нет в наличии, сообщим о поступлении"; }
+          }
+        }
+        var bar = document.querySelector(".rk-rv__mbar");
+        if (bar) { var pb = map[uidOf(bar.querySelector('a[href*="/tproduct/"]'))], b = bar.querySelector("b"); if (pb && pb.price && b) b.textContent = money(pb.price); }
+        document.querySelectorAll(".rk-rv table tr").forEach(function (tr) {
+          var p = map[uidOf(tr.querySelector('a[href*="/tproduct/"]'))], td = tr.querySelector("td:last-child");
+          if (p && p.price && td && /\d\s?\d{3}\s?₽/.test(td.textContent)) td.textContent = money(p.price);
+        });
+      }
+      if (cached && cached.t > Date.now() - TTL) { apply(cached.m); return; }
+      fetch("https://store.tildaapi.com/api/getproductslist/?storepartuid=277169402972&recid=2359100721&getparts=true&getoptions=true&slice=1&size=200&c=" + Date.now())
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          var map = {};
+          (d.products || []).forEach(function (p) {
+            var q = String(p.quantity == null ? "" : p.quantity).trim();
+            map[String(p.uid)] = { price: parseFloat(p.price) || 0, stock: q === "" || parseFloat(q) > 0 };
+          });
+          try { sessionStorage.setItem(KEY, JSON.stringify({ t: Date.now(), m: map })); } catch (e) {}
+          apply(map);
+        }).catch(function () {});
+    } catch (e) {}
+  }
   function rkGoals() {
     if (window.__rkGoals) return; window.__rkGoals = true;
     var C = 112572367;
@@ -705,7 +754,7 @@ if (!window.__rkLoadedMain) { window.__rkLoadedMain = true;
     try { relevantsClean(); } catch (e) {}
     try { rkBgResize(); rkH2(); } catch (e) {}
     try { rkStripMicrodata(); } catch (e) {}
-    try { rkGoals(); rkCartCRO(); rkStickyBuy(); } catch (e) {}
+    try { rkGoals(); rkCartCRO(); rkStickyBuy(); rkLivePrices(); } catch (e) {}
     try { rkImages(); } catch (e) {}
     try { rkBreadcrumb(); } catch (e) {}
     try { if (!document.documentElement.lang) document.documentElement.lang = "ru"; } catch (e) {}
