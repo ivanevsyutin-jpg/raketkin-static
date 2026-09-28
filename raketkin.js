@@ -486,6 +486,27 @@ if (!window.__rkLoadedMain) { window.__rkLoadedMain = true;
   (function rkCROcss(){try{if(document.getElementById('rk-cro-css'))return;var st=document.createElement('style');st.id='rk-cro-css';st.textContent=".rk-cart-trust{display:flex;flex-direction:column;gap:4px;margin:8px 0 12px;padding:10px 12px;border:1px solid #D7DEDB;border-radius:6px;background:#F4F7F5;font:500 12.5px/1.4 'Manrope',system-ui,sans-serif;color:#5B6663}.rk-cart-trust span:first-child{font-weight:700;color:#0E3B33}#rk-sticky{position:fixed;left:0;right:0;bottom:0;z-index:9999;display:flex;align-items:center;gap:12px;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid #D7DEDB;box-shadow:0 -6px 20px -12px rgba(20,24,26,.4)}#rk-sticky .rk-sticky__p{font:800 18px/1 'Manrope',system-ui,sans-serif;color:#14181A;font-variant-numeric:tabular-nums;white-space:nowrap}#rk-sticky .rk-sticky__b{flex:1;padding:14px;border:0;border-radius:6px;background:#0E3B33;color:#fff;font:700 15px/1 'Manrope',system-ui,sans-serif;cursor:pointer}@media(min-width:641px){#rk-sticky{display:none}}";(document.head||document.documentElement).appendChild(st);}catch(e){}})();
   // v2.33: живые цены и наличие на статичных страницах (бренды, /podbor, обзоры) из API Tilda Store.
   //        В HTML цены вшиты при сборке и устаревают; здесь они сверяются с каталогом при каждом открытии.
+  // v2.34: ссылка «Читать обзор модели» на карточке товара, если у модели есть обзор (карта строится билдером хаба).
+  function rkReviewLink() {
+    try {
+      var m = location.pathname.match(/^\/tproduct\/(\d+)-/); if (!m) return;
+      if (document.querySelector(".rk-revlink")) return;
+      if (!document.querySelector(".kr-eb")) return;
+      if (!window.__rkRevMap) {
+        var d = new Date(), day = d.getFullYear() + "" + (d.getMonth() + 1) + d.getDate();
+        window.__rkRevMap = fetch("https://178-236-248-106.sslip.io/cards/rk/reviews_map.json?d=" + day).then(function (r) { return r.json(); }).catch(function () { return {}; });
+      }
+      window.__rkRevMap.then(function (map) {
+        var it = map && map[m[1]]; if (!it || document.querySelector(".rk-revlink")) return;
+        // в строку бренда над названием: строка уже есть, высота не меняется, сдвига вёрстки нет
+        var eb = document.querySelector(".kr-eb"); if (!eb) return;
+        var a = document.createElement("a"); a.className = "rk-revlink"; a.href = "/" + it.slug;
+        a.textContent = "Читать обзор";
+        a.setAttribute("style", "margin-left:14px;font:600 13px/1 Manrope,system-ui,sans-serif;letter-spacing:0;text-transform:none;color:#0E3B33;text-decoration:underline;text-underline-offset:3px;white-space:nowrap");
+        eb.appendChild(a);
+      });
+    } catch (e) {}
+  }
   function rkLivePrices() {
     try {
       if (window.__rkLive || location.pathname.indexOf("/tproduct/") === 0) return;
@@ -754,14 +775,14 @@ if (!window.__rkLoadedMain) { window.__rkLoadedMain = true;
     try { relevantsClean(); } catch (e) {}
     try { rkBgResize(); rkH2(); } catch (e) {}
     try { rkStripMicrodata(); } catch (e) {}
-    try { rkGoals(); rkCartCRO(); rkStickyBuy(); rkLivePrices(); } catch (e) {}
+    try { rkGoals(); rkCartCRO(); rkStickyBuy(); rkLivePrices(); rkReviewLink(); } catch (e) {}
     try { rkImages(); } catch (e) {}
     try { rkBreadcrumb(); } catch (e) {}
     try { if (!document.documentElement.lang) document.documentElement.lang = "ru"; } catch (e) {}
   }
   if (document.readyState !== "loading") run2(); else document.addEventListener("DOMContentLoaded", run2);
   [200, 600, 1200, 2500, 4000, 7000].forEach(function (d) { setTimeout(run2, d); });
-  try { var moT = null; new MutationObserver(function (ms) { if (ms.every(function (m) { return m.target.closest && m.target.closest(".rk-showoos, .rk-quiz"); })) return; if (moT) return; moT = setTimeout(function () { moT = null; try { cleanTitles(); cardChips(); oosCards(); trustStatic(); navFix(); oosCollapse(); relevantsClean(); rkImages(); rkBreadcrumb(); rkBgResize(); rkH2(); rkStripMicrodata(); rkCartCRO(); rkStickyBuy(); } catch (e) {} }, 150); }).observe(document.documentElement, { childList: true, subtree: true }); } catch (e) {}
+  try { var moT = null; new MutationObserver(function (ms) { if (ms.every(function (m) { return m.target.closest && m.target.closest(".rk-showoos, .rk-quiz"); })) return; if (moT) return; moT = setTimeout(function () { moT = null; try { cleanTitles(); cardChips(); oosCards(); trustStatic(); navFix(); oosCollapse(); relevantsClean(); rkImages(); rkBreadcrumb(); rkBgResize(); rkH2(); rkStripMicrodata(); rkCartCRO(); rkStickyBuy(); rkReviewLink(); } catch (e) {} }, 150); }).observe(document.documentElement, { childList: true, subtree: true }); } catch (e) {}
 })();
 
 /* ===== Каталог: случайный порядок + распроданные в конец (CSS order, устойчиво к перерисовке). Перенесено из HEAD 31.07 ===== */
