@@ -566,6 +566,10 @@ if (!window.__rkLoadedMain) { window.__rkLoadedMain = true;
       if (/в корзину/.test(txt)) hit('add_to_cart');
       else if (/оформить заказ/.test(txt)) hit('order');
     }, true);
+    // v2.36: заказ реально отправлен (Tilda шлёт событие после успешной отправки формы корзины)
+    document.addEventListener('tildaform:aftersuccess', function (ev) {
+      try { var f = ev.target; if (f && (f.id === 'form3520198901' || (f.closest && f.closest('.t706')))) hit('order_submit'); } catch (e) {}
+    }, true);
   }
   function rkCartCRO() {
     // Доверие + подарок над кнопкой «Оформить заказ» в модалке корзины
