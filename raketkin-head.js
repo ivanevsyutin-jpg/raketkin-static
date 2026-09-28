@@ -19,8 +19,7 @@ var bound=false;
 [].slice.call(foot.querySelectorAll('a')).forEach(function(a){
 var t=a.textContent.trim();
 if(BRANDS.indexOf(t)>=0){
-a.setAttribute('href','/?tfc_brand[2359100721]='+encodeURIComponent(t)+'&tfc_div=:::#rec2359100721');
-a.addEventListener('click',function(e){ if(document.querySelector('#rec2359100721')){ e.preventDefault(); applyBrand(t);} });
+a.setAttribute('href','https://raketkin.shop/'+t.toLowerCase()); // v2.35: страницы брендов вместо фильтра каталога (фильтр = дубль главной в индексе)
 bound=true;
 }
 });
