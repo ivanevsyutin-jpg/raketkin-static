@@ -507,6 +507,26 @@ if (!window.__rkLoadedMain) { window.__rkLoadedMain = true;
       });
     } catch (e) {}
   }
+  // v2.37: видимые хлебные крошки на карточке товара (Главная > Ракетки бренда). Встают в строку
+  //        «Ракетка для падел-тенниса» над названием: строка уже есть, высота не меняется, сдвига нет.
+  function rkCrumbs() {
+    try {
+      if (location.pathname.indexOf("/tproduct/") !== 0) return;
+      var eb = document.querySelector(".kr-eb"); if (!eb || eb.querySelector(".rk-crumbs")) return;
+      var lab = eb.querySelector("i"); if (!lab) return;
+      var h1 = document.querySelector("h1"); var name = h1 ? h1.textContent.trim() : "";
+      if (!name) return;
+      var brands = { bullpadel: "Bullpadel", babolat: "Babolat", nox: "Nox", head: "Head" };
+      var key = (name.split(" ")[0] || "").toLowerCase();
+      var nav = document.createElement("nav"); nav.className = "rk-crumbs"; nav.setAttribute("aria-label", "Хлебные крошки");
+      var st = "color:inherit;text-decoration:none";
+      var html = '<a href="/" style="' + st + '">Главная</a>';
+      if (brands[key]) html += ' <span aria-hidden="true">›</span> <a href="/' + key + '" style="' + st + '">Ракетки ' + brands[key] + '</a>';
+      nav.innerHTML = html;
+      nav.setAttribute("style", "display:inline;font:inherit;letter-spacing:inherit;text-transform:inherit;color:inherit");
+      lab.textContent = ""; lab.appendChild(nav);
+    } catch (e) {}
+  }
   function rkLivePrices() {
     try {
       if (window.__rkLive || location.pathname.indexOf("/tproduct/") === 0) return;
@@ -779,14 +799,14 @@ if (!window.__rkLoadedMain) { window.__rkLoadedMain = true;
     try { relevantsClean(); } catch (e) {}
     try { rkBgResize(); rkH2(); } catch (e) {}
     try { rkStripMicrodata(); } catch (e) {}
-    try { rkGoals(); rkCartCRO(); rkStickyBuy(); rkLivePrices(); rkReviewLink(); } catch (e) {}
+    try { rkGoals(); rkCartCRO(); rkStickyBuy(); rkLivePrices(); rkReviewLink(); rkCrumbs(); } catch (e) {}
     try { rkImages(); } catch (e) {}
     try { rkBreadcrumb(); } catch (e) {}
     try { if (!document.documentElement.lang) document.documentElement.lang = "ru"; } catch (e) {}
   }
   if (document.readyState !== "loading") run2(); else document.addEventListener("DOMContentLoaded", run2);
   [200, 600, 1200, 2500, 4000, 7000].forEach(function (d) { setTimeout(run2, d); });
-  try { var moT = null; new MutationObserver(function (ms) { if (ms.every(function (m) { return m.target.closest && m.target.closest(".rk-showoos, .rk-quiz"); })) return; if (moT) return; moT = setTimeout(function () { moT = null; try { cleanTitles(); cardChips(); oosCards(); trustStatic(); navFix(); oosCollapse(); relevantsClean(); rkImages(); rkBreadcrumb(); rkBgResize(); rkH2(); rkStripMicrodata(); rkCartCRO(); rkStickyBuy(); rkReviewLink(); } catch (e) {} }, 150); }).observe(document.documentElement, { childList: true, subtree: true }); } catch (e) {}
+  try { var moT = null; new MutationObserver(function (ms) { if (ms.every(function (m) { return m.target.closest && m.target.closest(".rk-showoos, .rk-quiz"); })) return; if (moT) return; moT = setTimeout(function () { moT = null; try { cleanTitles(); cardChips(); oosCards(); trustStatic(); navFix(); oosCollapse(); relevantsClean(); rkImages(); rkBreadcrumb(); rkBgResize(); rkH2(); rkStripMicrodata(); rkCartCRO(); rkStickyBuy(); rkReviewLink(); rkCrumbs(); } catch (e) {} }, 150); }).observe(document.documentElement, { childList: true, subtree: true }); } catch (e) {}
 })();
 
 /* ===== Каталог: случайный порядок + распроданные в конец (CSS order, устойчиво к перерисовке). Перенесено из HEAD 31.07 ===== */
